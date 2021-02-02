@@ -1,0 +1,7 @@
+*.pch
+*.dll
+*.exe
+-miltiInst
+bin/test
+bin/program
+build/**.*.o
