@@ -1,7 +1,7 @@
-#include <iostream>
-#include <iomanip>
-#include <time.h>
 #include "mySimpleComputer.h"
+#include <iomanip>
+#include <iostream>
+#include <time.h>
 
 using namespace std;
 
@@ -10,17 +10,16 @@ int main()
     srand(time(nullptr));
 
     int val;
-    char* file = new char[8] {'R', 'A', 'M', '.', 'd', 'a', 't', '\0'};
+    char* file = new char[8]{'R', 'A', 'M', '.', 'd', 'a', 't', '\0'};
 
     sc_memoryInit();
     sc_memoryLoad(file);
 
-    for(int i = 0; i < size; i++)
-    {
+    for (int i = 0; i < size; i++) {
         sc_memoryGet(i, val);
-        if(i+1 / 10 == 0)
+        if (i + 1 / 10 == 0)
             cout << "\n";
-        cout << setw(4) << val << " "; 
+        cout << setw(4) << val << " ";
     }
     cout << "\n\n";
 
@@ -31,11 +30,12 @@ int main()
     sc_regSet(4, 0);
     sc_regSet(5, 0);
 
-    for(int i = 1; i <= 5; i++)
-    {
+    for (int i = 1; i <= 5; i++) {
         sc_regGet(i, val);
         cout << "reg " << i << " " << val << "\n";
     }
-    
+    int command, operand;
+    sc_commandEncode(20, memory[50], val);
+    sc_commandDecode(command, operand, val);
     return 0;
 }
