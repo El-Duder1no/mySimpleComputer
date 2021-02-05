@@ -2,6 +2,9 @@
 
 int memory[size];
 int regFlags;
+const int commands[] = {10, 11, 20, 21, 30, 31, 32, 33, 40, 41, 42, 43, 51,
+                        52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64,
+                        65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76};
 
 int sc_memoryInit()
 {
@@ -93,25 +96,37 @@ int sc_regGet(int reg, int& value)
         return -1;
 }
 
-int sc_commandEncode(int command, int operand, int* value)
+int sc_commandEncode(int command, int operand, int& value)
 {
     bool flag = false;
     int commandCode = 0;
-    if (!binary_search(commands, commands + commandsArrSize, command)) {
+    if (!std::binary_search(commands, commands + commandsSize, command)) {
         sc_regSet(5, 1);
         std::cout << "INVALID_COMMAND\n";
         return -1;
-    } else if (operand >= 0 && operand <= size) {
-        //кодирование команды и присваивание переменной value
     } else {
-        sc_regSet(OUT_OF_BOUNDS, 1);
-        std::cout << "OUT_OF_BOUNDS_MEMORY\n";
-        return -1;
+        value = (command << 7) | operand;
     }
     return 0;
 }
 
-int sc_commandDecode(int* command, int* operand, int value)
+int sc_commandDecode(int& command, int& operand, int value)
 {
+    int attribute;
+    int tmpCommand, tmpOperand;
+
+    attribute = (value >> 14) & 1;
+    if (attribute == 0) {
+        tmpCommand = (value >> 7) & 0x7F;
+        tmpOperand = value & 0x7F;
+        if (std::binary_search(commands, commands + commandsSize, tmpCommand)) {
+            command = tmpCommand;
+            operand = tmpOperand;
+        } else {
+            sc_regSet(INVALID_COMMAND, 1);
+            return -1;
+        }
+    } else
+        return 1;
     return 0;
 }
