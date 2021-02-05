@@ -111,7 +111,7 @@ int sc_commandEncode(int command, int operand, int* value)
     return 0;
 }
 
-int sc_commandEncode(int* command, int* operand, int value)
+int sc_commandDecode(int* command, int* operand, int value)
 {
     return 0;
 }
