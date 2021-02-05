@@ -17,7 +17,7 @@ int sc_memorySet(int address, int value)
         memory[address] = value;
         return 0;
     } else {
-        sc_regSet(3, 1);
+        sc_regSet(OUT_OF_BOUNDS, 1);
         std::cout << "OUT_OF_BOUNDS_MEMORY\n";
         return -1;
     }
@@ -28,7 +28,7 @@ int sc_memoryGet(int address, int& value)
         value = memory[address];
         return 0;
     } else {
-        sc_regSet(3, 1);
+        sc_regSet(OUT_OF_BOUNDS, 1);
         std::cout << "OUT_OF_BOUNDS_MEMORY\n";
         return -1;
     }
@@ -99,11 +99,13 @@ int sc_commandEncode(int command, int operand, int* value)
     int commandCode = 0;
     if (!binary_search(commands, commands + commandsArrSize, command)) {
         sc_regSet(5, 1);
+        std::cout << "INVALID_COMMAND\n";
         return -1;
     } else if (operand >= 0 && operand <= size) {
         //кодирование команды и присваивание переменной value
     } else {
-        sc_regSet(3, 1);
+        sc_regSet(OUT_OF_BOUNDS, 1);
+        std::cout << "OUT_OF_BOUNDS_MEMORY\n";
         return -1;
     }
     return 0;
