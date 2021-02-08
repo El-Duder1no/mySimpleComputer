@@ -1,6 +1,6 @@
 #include "mySimpleComputer.h"
 
-int memory[size];
+int memory[memSize];
 int regFlags;
 const int commands[] = {10, 11, 20, 21, 30, 31, 32, 33, 40, 41, 42, 43, 51,
                         52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64,
@@ -8,71 +8,63 @@ const int commands[] = {10, 11, 20, 21, 30, 31, 32, 33, 40, 41, 42, 43, 51,
 
 int sc_memoryInit()
 {
-    for (int i = 0; i < size; i++) {
+    for(int i = 0; i < memSize; i++)
+    {
         memory[i] = 0;
     }
     return 0;
 }
-
 int sc_memorySet(int address, int value)
 {
-    if (address >= 0 and address < size) {
+    if (address >= 0 and address < memSize) {
         memory[address] = value;
         return 0;
     } else {
         sc_regSet(OUT_OF_BOUNDS, 1);
-        std::cout << "OUT_OF_BOUNDS_MEMORY\n";
+        printf("OUT_OF_BOUNDS_MEMORY\n");
         return -1;
     }
 }
 int sc_memoryGet(int address, int& value)
 {
-    if (address >= 0 and address < size) {
+    if (address >= 0 and address < memSize) {
         value = memory[address];
         return 0;
     } else {
         sc_regSet(OUT_OF_BOUNDS, 1);
-        std::cout << "OUT_OF_BOUNDS_MEMORY\n";
+        printf("OUT_OF_BOUNDS_MEMORY\n");
         return -1;
     }
 }
 
 int sc_memorySave(char* filename)
 {
-    std::ofstream write(filename, std::ios::binary | std::ios::trunc);
-
-    if (!write.is_open()) {
+    FILE *write = fopen(filename, "wb+");
+    if(write == NULL)
+    {
         return -1;
     }
-
-    for (int i = 0; i < size; i++) {
-        write.write((char*)&memory[i], sizeof(memory[i]));
-    }
-
-    write.close();
+    fwrite(memory, sizeof(int), memSize, write);
+    fclose(write);
     return 0;
 }
 int sc_memoryLoad(char* filename)
 {
-    std::ifstream read(filename, std::ios::binary);
-
-    if (!read.is_open()) {
-        return -1;
+    FILE * read = fopen(filename, "rb+");
+    if(read == NULL)
+    {
+        return -1;    
     }
-
-    for (int i = 0; i < size; i++) {
-        read.read((char*)&memory[i], sizeof(memory[i]));
-    }
-
-    read.close();
+    fread(memory, sizeof(int), memSize, read);
+    fclose(read);
     return 0;
 }
+
 int sc_regInit()
 {
     regFlags = 0;
-    return 0;
+    return 0; 
 }
-
 int sc_regSet(int reg, int value)
 {
     if (reg >= 1 and reg <= 5) {
@@ -96,37 +88,38 @@ int sc_regGet(int reg, int& value)
         return -1;
 }
 
+int cmp(const void *left, const void *right)
+{
+    return(*(int*)left - *(int*)right);
+}
 int sc_commandEncode(int command, int operand, int& value)
 {
-    bool flag = false;
-    int commandCode = 0;
-    if (!std::binary_search(commands, commands + commandsSize, command)) {
-        sc_regSet(5, 1);
-        std::cout << "INVALID_COMMAND\n";
-        return -1;
-    } else {
+    if (bsearch(&command, commands, commandsSize, sizeof(int), cmp)) {
         value = (command << 7) | operand;
+    } else {
+        sc_regSet(INVALID_COMMAND, 1);
+        printf("INVALID_COMMAND\n");
+        return -1;
     }
     return 0;
 }
-
 int sc_commandDecode(int& command, int& operand, int value)
 {
-    int attribute;
-    int tmpCommand, tmpOperand;
+   int tmpCommand, tmpOperand;
 
-    attribute = (value >> 14) & 1;
-    if (attribute == 0) {
-        tmpCommand = (value >> 7) & 0x7F;
+    if (((value >> 14) & 1) == 0) {
+        tmpCommand = value >> 7;
         tmpOperand = value & 0x7F;
-        if (std::binary_search(commands, commands + commandsSize, tmpCommand)) {
+
+        if (bsearch(&tmpCommand, commands, commandsSize, sizeof(int), cmp)) {
             command = tmpCommand;
             operand = tmpOperand;
         } else {
+            printf("INVALID_COMMAND\n");
             sc_regSet(INVALID_COMMAND, 1);
             return -1;
         }
     } else
         return 1;
-    return 0;
+    return 0; 
 }

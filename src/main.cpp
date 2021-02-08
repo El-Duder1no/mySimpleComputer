@@ -1,9 +1,6 @@
 #include "mySimpleComputer.h"
-#include <iomanip>
-#include <iostream>
+#include <stdio.h>
 #include <time.h>
-
-using namespace std;
 
 int main()
 {
@@ -15,27 +12,31 @@ int main()
     sc_memoryInit();
     sc_memoryLoad(file);
 
-    for (int i = 0; i < size; i++) {
+    for (int i = 0; i < memSize; i++) {
         sc_memoryGet(i, val);
-        if (i + 1 / 10 == 0)
-            cout << "\n";
-        cout << setw(4) << val << " ";
+        printf("%-5d", val);
+        if ((i + 1) % 10 == 0)
+            printf("\n");
     }
-    cout << "\n\n";
+    printf("\n");
 
     sc_regInit();
-    sc_regSet(1, 0);
-    sc_regSet(2, 1);
-    sc_regSet(3, 1);
-    sc_regSet(4, 0);
-    sc_regSet(5, 0);
+    sc_regSet(OPERATION_OVERFLOW, 0);
+    sc_regSet(DIVISION_BY_ZERO, 1);
+    sc_regSet(OUT_OF_BOUNDS, 1);
+    sc_regSet(CLOCK_PULSE_IGNORE, 0);
+    sc_regSet(INVALID_COMMAND, 0);
 
     for (int i = 1; i <= 5; i++) {
         sc_regGet(i, val);
-        cout << "reg " << i << " " << val << "\n";
+        printf("reg %d \n", val);
     }
-    int command, operand;
-    sc_commandEncode(20, memory[50], val);
+
+    int command = 20, operand = memory[50];
+    printf("\nCommand - %d\nOperand - %d\n", command, operand);
+    sc_commandEncode(command, operand, val);
     sc_commandDecode(command, operand, val);
+    printf("\nCommand - %d\nOperand - %d\n", command, operand);
+
     return 0;
 }
