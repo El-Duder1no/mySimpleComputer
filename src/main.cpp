@@ -33,11 +33,10 @@ int main()
         PC.regGet(i, val);
         cout << "Register " << i << " = " << val << "\n";
     }
-    
 
-    int command, operand;
+    int command = 0xB, operand = 119;
     cout << "\nCommand = " << command << "\tOperand = " << operand << "\n";
-    PC.commandEncode(0xB, 1000, val);
+    PC.commandEncode(command, operand, val);
     PC.commandDecode(command, operand, val);
     cout << "Command = " << command << "\tOperand = " << operand << "\n";
 
