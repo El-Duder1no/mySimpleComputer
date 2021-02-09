@@ -17,7 +17,7 @@ int myComputer::memorySet(int address, int value)
     {
         memory[address] = value;
         return 0;
-    } 
+    }
     else 
     {
         regSet(myComputer::OUT_OF_BOUNDS, 1);
@@ -102,17 +102,22 @@ int myComputer::regGet(int reg, int& value)
 
 int myComputer::commandEncode(int command, int operand, int& value)
 {
-    if (std::binary_search(commands.begin(), commands.end(), command)) 
+    if(operand <= 0x7F)
     {
-        value = (command << 7) | operand;
-        return 0;
-    } 
-    else 
-    {
-        regSet(myComputer::INVALID_COMMAND, 1);
-        std::cout << "Encode - INVALID_COMMAND\n";
-        return -1;
+        if (std::binary_search(commands.begin(), commands.end(), command)) 
+        {
+            value = (command << 7) | operand;
+            return 0;
+        } 
+        else 
+        {
+            regSet(myComputer::INVALID_COMMAND, 1);
+            std::cout << "Encode - INVALID_COMMAND\n";
+            return -1;
+        }
     }
+    else
+        return -1;
 }
 int myComputer::commandDecode(int& command, int& operand, int value)
 {
@@ -120,9 +125,8 @@ int myComputer::commandDecode(int& command, int& operand, int value)
 
     if (((value >> 14) & 1) == 0) 
     {
-        tmpCommand = (value >> 7) & 0x7F;
+        tmpCommand = value >> 7;
         tmpOperand = value & 0x7F;
-        //std::cout << "tmpCommand = " << tmpCommand << "\n";
 
         if (std::binary_search(commands.begin(), commands.end(), tmpCommand)) 
         {
