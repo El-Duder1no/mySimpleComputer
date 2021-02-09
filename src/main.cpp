@@ -12,7 +12,7 @@ int main()
     int val;
     myComputer PC;
 
-    PC.memoryLoad("RAM.dat");
+    PC.memoryLoad("res/RAM.dat");
     for(int i = 0; i < PC.memorySize(); i++)
     {
         PC.memoryGet(i, val);
