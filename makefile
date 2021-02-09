@@ -1,14 +1,29 @@
-program: main.o libmySimpleComputer.a
-	g++ -Wall -Werror -o program main.o -L. -lmySimpleComputer
+EXE = bin/SimpleComputer
 
-main.o: src/main.cpp
-	g++ -Wall -Werror -c src/main.cpp -o main.o
+DIR_SRC = build
 
-mySimpleComputer.o: src/mySimpleComputer.cpp
-	g++ -Wall -Werror -c src/mySimpleComputer.cpp -o mySimpleComputer.o
+CC = g++
+FLAGS = -Wall -Werror --std=c++17
 
-libmySimpleComputer.a: mySimpleComputer.o
-	ar cr libmySimpleComputer.a mySimpleComputer.o
+.PHONY: clean run
+
+all: $(EXE) run
+
+$(EXE): $(DIR_SRC)/main.o $(DIR_SRC)/libmySimpleComputer.a
+	$(CC) $(FLAGS) -o $@ $^ -Lbuild -lmySimpleComputer
+
+$(DIR_SRC)/main.o: src/main.cpp
+	$(CC) $(FLAGS) -c $^ -o $@
+
+$(DIR_SRC)/mySimpleComputer.o: src/mySimpleComputer.cpp
+	$(CC) $(FLAGS) -c $^ -o $@
+
+$(DIR_SRC)/libmySimpleComputer.a: $(DIR_SRC)/mySimpleComputer.o
+	ar cr $(DIR_SRC)/libmySimpleComputer.a $(DIR_SRC)/mySimpleComputer.o
+
+run:
+	./bin/SimpleComputer
 
 clean:
-	rm -f *.o *.a program
+	rm -f $(DIR_SRC)/*.o
+	rm -f $(EXE)
