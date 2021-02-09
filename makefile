@@ -1,24 +1,14 @@
-EXE = bin/program
-TEST = bin/test
+program: main.o libmySimpleComputer.a
+	g++ -Wall -Werror -o program main.o -L. -lmySimpleComputer
 
-DIR_SRC = build/src
-DIR_TEST = build/test
+main.o: src/main.cpp
+	g++ -Wall -Werror -c src/main.cpp -o main.o
 
-FLAGS = -Wall -Werror --std=c++17
+mySimpleComputer.o: src/mySimpleComputer.cpp
+	g++ -Wall -Werror -c src/mySimpleComputer.cpp -o mySimpleComputer.o
 
-OBJ = g++ $(FLAGS) -c $^ -o $@
-
-all: $(EXE) $(TEST)
-
-.PHONY: clean all
-
-$(EXE): $(DIR_SRC)/main.o
-	g++ $(FLAGS) $^ -o $@
-
-$(DIR_SRC)/main.o: src/main.cpp
-	$(OBJ)
+libmySimpleComputer.a: mySimpleComputer.o
+	ar cr libmySimpleComputer.a mySimpleComputer.o
 
 clean:
-	rm -rf $(DIR_SRC)/*.o
-	rm -rf $(DIR_TEST)/*.o
-	rm bin/*.exe
+	rm -f *.o *.a program
