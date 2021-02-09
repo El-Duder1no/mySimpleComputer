@@ -32,7 +32,7 @@ int main()
         printf("reg %d \n", val);
     }
 
-    int command = 20, operand = memory[50];
+    int command = 0xA, operand = memory[50];
     printf("\nCommand - %d\nOperand - %d\n", command, operand);
     sc_commandEncode(command, operand, val);
     sc_commandDecode(command, operand, val);
