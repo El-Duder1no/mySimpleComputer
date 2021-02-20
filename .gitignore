@@ -1,7 +1,5 @@
 *.pch
-*.dll
+*.a
 *.exe
--miltiInst
-bin/test
-bin/program
-build/**.*.o
+bin/*
+build/*.o
