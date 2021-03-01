@@ -1,5 +1,7 @@
 #include "mySimpleComputer.h"
 #include "myTerm.h"
+#include "myBigChars.h"
+
 #include <iostream>
 #include <iomanip>
 #include <time.h>
@@ -10,6 +12,7 @@ int main()
 {
     srand(time(nullptr));
 
+    /*
     int val;
     myComputer PC;
 
@@ -48,6 +51,7 @@ int main()
     cout << "\nPress any key to clear the screen\n";
     cin.get();
     clrscr();
+    */
 
     gotoXY(5, 10);
     setBGColor(Colors::BLACK);
@@ -58,6 +62,16 @@ int main()
     setBGColor(Colors::WHITE);
     setFGColor(Colors::GREEN);
     cout << "ИП-912\n";
+
+    cout << "\E[0m";
+
+    cout << "\nPress any key to clear the screen\n";
+    cin.get();
+    clrscr();
+
+    int one[2] = { 809'252'912, 808'464'432 };
+    printBox(10, 5, 9, 9);
+    printBigChar(one, 10, 6, Colors::WHITE, Colors::BLACK);
 
     return 0;
 }
