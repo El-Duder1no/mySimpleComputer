@@ -53,25 +53,38 @@ int main()
     clrscr();
     */
 
-    gotoXY(5, 10);
-    setBGColor(Colors::BLACK);
-    setFGColor(Colors::RED);
-    cout << "Удовченко А.Е.\tКремлякова И.Д.\n";
-
-    gotoXY(6, 8);
-    setBGColor(Colors::WHITE);
-    setFGColor(Colors::GREEN);
-    cout << "ИП-912\n";
-
-    cout << "\E[0m";
-
-    cout << "\nPress any key to clear the screen\n";
-    cin.get();
-    clrscr();
-
-    int one[2] = { 809'252'912, 808'464'432 };
+	int zero[2]   = 	{ 572'660'736, 471'999'010 };
+    int one[2]    = 	{ 134'876'160, 1'040'713'736 };
+    int two[2]    = 	{ 269'487'616, 503'448'584 };
+    int three[2]  = 	{ 269'487'616, 235'933'708 };
+    int four[2]   = 	{ 337'121'280, 269'499'922 };
+    int five[2]   = 	{ 33'693'184,  235'933'710 };
+    int six[2] 	  = 	{ 33'830'912,  472'000'026 };
+    int seven[2]  = 	{ 269'499'904, 33'817'608 };
+    int eight[2] =		{ 304'225'280, 471'999'004 };
+    int nine[2]   =		{ 572'660'736, 235'937'852 };
+    
+    printBigChar(zero, 10, 6, Colors::WHITE, Colors::BLACK);
     printBox(10, 5, 9, 9);
-    printBigChar(one, 10, 6, Colors::WHITE, Colors::BLACK);
+    printBigChar(one, 10, 16, Colors::WHITE, Colors::BLACK);
+    printBox(10, 15, 9, 9);
+    printBigChar(two, 10, 26, Colors::WHITE, Colors::BLACK);
+    printBox(10, 25, 9, 9);
+    printBigChar(three, 10, 36, Colors::WHITE, Colors::BLACK);
+    printBox(10, 35, 9, 9);
+    printBigChar(four, 10, 46, Colors::WHITE, Colors::BLACK);
+    printBox(10, 45, 9, 9);
+    
+    printBigChar(five, 25, 6, Colors::WHITE, Colors::BLACK);
+    printBox(25, 5, 9, 9);
+    printBigChar(six, 25, 16, Colors::WHITE, Colors::BLACK);
+    printBox(25, 15, 9, 9);
+    printBigChar(seven, 25, 26, Colors::WHITE, Colors::BLACK);
+    printBox(25, 25, 9, 9);
+    printBigChar(eight, 25, 36, Colors::WHITE, Colors::BLACK);
+    printBox(25, 35, 9, 9);
+    printBigChar(nine, 25, 46, Colors::WHITE, Colors::BLACK);
+    printBox(25, 45, 9, 9);
 
     return 0;
 }
