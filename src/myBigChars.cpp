@@ -68,7 +68,7 @@ int printBigChar(int arr[2], int x, int y, Colors fgColor, Colors bgColor)
             printA(string);
         }
     }
-    std::cout << "\E[0m";
+    setDefaultColor();
     gotoXY(x + 10, 0);
     return 0;
 }
