@@ -53,3 +53,9 @@ int setBGColor(Colors color)
     else
         return -1;
 }
+
+int setDefaultColor()
+{
+	std::cout << "\E[0m";
+	return 0;
+}
