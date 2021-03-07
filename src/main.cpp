@@ -74,8 +74,10 @@ int main()
     int seven[2]  = 	{ 1'893'793'791, 471'604'280 };
     int eight[2] =		{ 2'129'133'438, 2'129'133'438 };
     int nine[2]   =		{ 4'293'394'302, 2'130'698'494 };
-	
-    printBigChar(zero, 10, 6, Colors::WHITE, Colors::BLACK);
+	int plus[2] =		{ 2'115'508'224, 1'579'134 };
+    int minus[2]   =		{ 2'113'929'216, 126 };
+    
+	printBigChar(zero, 10, 6, Colors::WHITE, Colors::BLACK);
     printBox(10, 5, 9, 9);
     printBigChar(one, 10, 16, Colors::WHITE, Colors::BLACK);
     printBox(10, 15, 9, 9);
