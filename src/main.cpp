@@ -52,30 +52,20 @@ int main()
     cin.get();
     clrscr();
     */
-
-/*	int zero[2]   = 	{ 572'660'736, 471'999'010 };
-    int one[2]    = 	{ 134'876'160, 1'040'713'736 };
-    int two[2]    = 	{ 269'487'616, 503'448'584 };
-    int three[2]  = 	{ 269'487'616, 235'933'708 };
-    int four[2]   = 	{ 337'121'280, 269'499'922 };
-    int five[2]   = 	{ 33'693'184,  235'933'710 };
-    int six[2] 	  = 	{ 33'830'912,  472'000'026 };
-    int seven[2]  = 	{ 269'499'904, 33'817'608 };
-    int eight[2] =		{ 304'225'280, 471'999'004 };
-    int nine[2]   =		{ 572'660'736, 235'937'852 };*/
     
-	int zero[2]   = 	{ 3'890'741'118, 4'278'183'911 };
-    int one[2]    = 	{ 943'602'744, 943'208'504 };
-    int two[2]    = 	{ 1'894'252'414, 4'294'903'580 };
-    int three[2]  = 	{ 2'145'451'903, 2'145'451'903 };
-    int four[2]   = 	{ 4'286'019'447, 1'886'417'151 };
-    int five[2]   = 	{ 2'131'230'719, 2'130'698'495 };
-    int six[2] 	  = 	{ 2'131'230'590, 2'130'700'287 };
-    int seven[2]  = 	{ 1'893'793'791, 471'604'280 };
-    int eight[2] =		{ 2'129'133'438, 2'129'133'438 };
-    int nine[2]   =		{ 4'293'394'302, 2'130'698'494 };
-	int plus[2] =		{ 2'115'508'224, 1'579'134 };
-    int minus[2]   =		{ 2'113'929'216, 126 };
+    /*
+	long int zero[2]   = 	{ 3'890'741'118, 2'130'700'263};
+    long int one[2]    = 	{ 943'602'744, 943'208'504 };
+    long int two[2]    = 	{ 1'894'252'414, 4'294'903'580 };
+    long int three[2]  = 	{ 2'145'451'903, 2'147'475'680 };
+    long int four[2]   = 	{ 4'286'019'447, 1'886'417'151 };
+    long int five[2]   = 	{ 2'131'230'719, 2'130'698'495 };
+    long int six[2]    = 	{ 2'131'230'590, 2'130'700'287 };
+    long int seven[2]  = 	{ 1'893'793'791, 471'604'280 };
+    long int eight[2]  =	{ 2'129'133'438, 2'129'127'399 };
+    long int nine[2]   =	{ 4'293'394'302, 2'130'698'494 };
+	long int plus[2]   =    { 2'115'508'224, 1'579'134 };
+    long int minus[2]  =	{ 2'113'929'216, 126 };
     
 	printBigChar(zero, 10, 6, Colors::WHITE, Colors::BLACK);
     printBox(10, 5, 9, 9);
@@ -87,6 +77,8 @@ int main()
     printBox(10, 35, 9, 9);
     printBigChar(four, 10, 46, Colors::WHITE, Colors::BLACK);
     printBox(10, 45, 9, 9);
+    printBigChar(plus, 10, 56, Colors::WHITE, Colors::BLACK);
+    printBox(10, 55, 9, 9);
     
     printBigChar(five, 25, 6, Colors::WHITE, Colors::BLACK);
     printBox(25, 5, 9, 9);
@@ -98,6 +90,32 @@ int main()
     printBox(25, 35, 9, 9);
     printBigChar(nine, 25, 46, Colors::WHITE, Colors::BLACK);
     printBox(25, 45, 9, 9);
+    printBigChar(minus, 25, 56, Colors::WHITE, Colors::BLACK);
+    printBox(25, 55, 9, 9);
+    */
+    
+    myBigChar zero(myBigChar::BigChar::Zero),   one(myBigChar::BigChar::One),      two(myBigChar::BigChar::Two),
+              three(myBigChar::BigChar::Three), four(myBigChar::BigChar::Four),    five(myBigChar::BigChar::Five),
+              six(myBigChar::BigChar::Six),     seven(myBigChar::BigChar::Seven),  eight(myBigChar::BigChar::Eight),
+              nine(myBigChar::BigChar::Nine),   plus(myBigChar::BigChar::Plus),    minus(myBigChar::BigChar::Minus);
 
+    zero.printBox(2, 2, 18, 54);
+
+    zero.print(2, 3, Colors::WHITE, Colors::BLACK);
+    one.print(2, 12, Colors::WHITE, Colors::BLACK);
+    two.print(2, 21, Colors::WHITE, Colors::BLACK);
+    three.print(2, 30, Colors::WHITE, Colors::BLACK);
+    four.print(2, 39, Colors::WHITE, Colors::BLACK);
+    plus.print(2, 48, Colors::WHITE, Colors::BLACK);
+
+    five.print(11, 3, Colors::WHITE, Colors::BLACK);
+    six.print(11, 12, Colors::WHITE, Colors::BLACK);
+    seven.print(11, 21, Colors::WHITE, Colors::BLACK);
+    eight.print(11, 30, Colors::WHITE, Colors::BLACK);
+    nine.print(11, 39, Colors::WHITE, Colors::BLACK);
+    minus.print(11, 48, Colors::WHITE, Colors::BLACK);
+
+    gotoXY(21, 1);
+    
     return 0;
 }
