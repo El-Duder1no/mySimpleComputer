@@ -34,6 +34,7 @@ $(DIR_SRC)/libmyBigChars.a: $(DIR_SRC)/myBigChars.o
 	ar cr $(DIR_SRC)/libmyBigChars.a $(DIR_SRC)/myBigChars.o
 
 run:
+	clear
 	./bin/SimpleComputer
 
 clean:
