@@ -22,5 +22,6 @@ int gotoXY(int row, int col);
 int getScreenSize(int& rows, int& cols);
 int setFGColor(Colors color);
 int setBGColor(Colors color);
+int setDefaultColor();
 
 #endif
