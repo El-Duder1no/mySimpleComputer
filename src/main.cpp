@@ -1,6 +1,7 @@
 #include "mySimpleComputer.h"
 #include "myTerm.h"
 #include "myBigChars.h"
+#include "printConsole.h"
 
 #include <iostream>
 #include <iomanip>
@@ -94,12 +95,11 @@ int main()
     printBox(25, 55, 9, 9);
     */
     
-    myBigChar zero(myBigChar::BigChar::Zero),   one(myBigChar::BigChar::One),      two(myBigChar::BigChar::Two),
+
+    /*myBigChar zero(myBigChar::BigChar::Zero),   one(myBigChar::BigChar::One),      two(myBigChar::BigChar::Two),
               three(myBigChar::BigChar::Three), four(myBigChar::BigChar::Four),    five(myBigChar::BigChar::Five),
               six(myBigChar::BigChar::Six),     seven(myBigChar::BigChar::Seven),  eight(myBigChar::BigChar::Eight),
               nine(myBigChar::BigChar::Nine),   plus(myBigChar::BigChar::Plus),    minus(myBigChar::BigChar::Minus);
-
-    zero.printBox(2, 2, 18, 54);
 
     zero.print(2, 3, Colors::WHITE, Colors::BLACK);
     one.print(2, 12, Colors::WHITE, Colors::BLACK);
@@ -114,8 +114,12 @@ int main()
     eight.print(11, 30, Colors::WHITE, Colors::BLACK);
     nine.print(11, 39, Colors::WHITE, Colors::BLACK);
     minus.print(11, 48, Colors::WHITE, Colors::BLACK);
+    
+    zero.printBox(2, 2, 18, 54);
 
-    gotoXY(21, 1);
+    gotoXY(21, 1);*/
+    
+    printBoxes();
     
     return 0;
 }

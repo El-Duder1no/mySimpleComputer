@@ -2,6 +2,7 @@
 #define MY_BIGCHARS_H
 
 #include "myTerm.h"
+
 #include <array>
 #include <unistd.h>
 
@@ -12,7 +13,7 @@
 #define HORIZONTAL_LINE      "q"
 #define VERTICAL_LINE        "x"
 
-#define BLOCK                'a'
+#define BLOCK                "a"
 
 typedef std::array<unsigned, 2> BC_ARRAY;
 
@@ -43,7 +44,7 @@ public:
         Five, Six,  Seven,  Eight,  Nine,
         Plus, Minus 
     };
-
+    myBigChar();
     myBigChar(BigChar symbol);
 
     int printA(const char* str);
@@ -53,15 +54,6 @@ public:
     int getPos(int* big, int x, int y, int& value);
     int writeBC(int fd, int* big, int need_count, int count);
     int readBC(int fd, int* big, int need_count, int& count);
-
 };
-
-// int printA(const char* str);
-// int printBox(int x, int y, int height, int width);
-// int printBigChar(long int arr[2], int x, int y, Colors fgColor, Colors bgColor);
-// int setBigCharPos(int* big, int x, int y, int value);
-// int getBigCharPos(int& big, int x, int y, int& value);
-// int bigCharWrite(int fd, int& big, int need_count, int count);
-// int bigCharRead(int fd, int& big, int need_count, int& count);
 
 #endif
