@@ -6,14 +6,7 @@
 #include <array>
 #include <unistd.h>
 
-#define TOP_LEFT_CORNER      "l"
-#define TOP_RIGHT_CORNER     "k"
-#define BOT_LEFT_CORNER      "m"
-#define BOT_RIGHT_CORNER     "j"
-#define HORIZONTAL_LINE      "q"
-#define VERTICAL_LINE        "x"
-
-#define BLOCK                "a"
+#define BLOCK   "a"
 
 typedef std::array<unsigned, 2> BC_ARRAY;
 
@@ -47,8 +40,6 @@ public:
     myBigChar();
     myBigChar(BigChar symbol);
 
-    int printA(const char* str);
-    int printBox(int x, int y, int height, int width);
     int print(int x, int y, Colors fgColor, Colors bgColor);
     int setPos(int* big, int x, int y, int value);
     int getPos(int* big, int x, int y, int& value);
