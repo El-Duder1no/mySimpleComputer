@@ -123,3 +123,4 @@ void printAll(myBigChar::BigChar sign, std::array<myBigChar::BigChar, 4> chars)
     printBigChars(sign, chars);
     gotoXY(26, 1);
 }
+
