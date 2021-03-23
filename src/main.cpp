@@ -15,13 +15,13 @@ int main()
         
     myComputer PC;
     PC.regSet(myComputer::OPERATION_OVERFLOW, 1);
-    PC.regSet(myComputer::DIVISION_BY_ZERO, 0);
+    PC.regSet(myComputer::DIVISION_BY_ZERO, 1);
     PC.regSet(myComputer::OUT_OF_BOUNDS, 1);
-    PC.regSet(myComputer::CLOCK_PULSE_IGNORE, 0);
+    PC.regSet(myComputer::CLOCK_PULSE_IGNORE, 1);
     PC.regSet(myComputer::INVALID_COMMAND, 1);    
     std::array<myBigChar::BigChar, 4> arr{myBigChar::Zero};
 
-    printAll(myBigChar::Plus, arr);
+    runConsole(myBigChar::Plus, arr);
     
     return 0;
 }
