@@ -124,3 +124,46 @@ void printAll(myBigChar::BigChar sign, std::array<myBigChar::BigChar, 4> chars)
     gotoXY(26, 1);
 }
 
+void runConsole(myBigChar::BigChar sign, std::array<myBigChar::BigChar, 4> chars)
+{
+	Keys key = Keys::None;
+	myComputer PC;
+	
+	printAll(sign, chars);
+	
+	while(key != Keys::Quit)
+	{
+		readkey(key);
+		switch(key)
+		{
+		case Keys::Up:
+			break;
+		case Keys::Down:
+			break;
+		case Keys::Left:
+			break;
+		case Keys::Right:
+			break;
+		case Keys::Load:
+			PC.memoryLoad("../res/RAM.dat");
+			break;
+		case Keys::Save:
+			PC.memorySave("../res/RAM.dat");
+			break;
+		case Keys::F5:
+			break;
+		case Keys::F6:
+			break;
+		case Keys::Run:
+			break;
+		case Keys::Step:
+			break;
+		case Keys::Reset:
+			break;
+		default:
+			break;
+			
+		}
+	}
+}
+
