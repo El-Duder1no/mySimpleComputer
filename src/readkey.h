@@ -1,6 +1,7 @@
 #ifndef MY_READ_KEY_H
 #define MY_READ_KEY_H
 
+#include <cstring>
 #include <fcntl.h>
 #include <termios.h>
 #include <sys/types.h>
@@ -19,6 +20,7 @@ enum Keys
     Reset,
     F5,
     F6,
+    Quit,
     None
 };
 

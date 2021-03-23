@@ -6,29 +6,29 @@ int readkey(Keys& key)
 
     char buffer[8] {};
 
-    read(STDIN_FILENO, buf, 8);
+    read(STDIN_FILENO, buffer, 8);
     
-    if(strcmp(buf, "\E[A") == 0)
+    if(strcmp(buffer, "\E[A") == 0)
         key = Keys::Up;
-    else if(strcmp(buf, "\E[B") == 0)
+    else if(strcmp(buffer, "\E[B") == 0)
         key = Keys::Down;
-    else if(strcmp(buf, "\E[C") == 0)
+    else if(strcmp(buffer, "\E[C") == 0)
         key = Keys::Right;
-    else if(strcmp(buf, "\E[D") == 0)
+    else if(strcmp(buffer, "\E[D") == 0)
         key = Keys::Left;
-    else if(strcmp(buf, "\E[15~") == 0)
+    else if(strcmp(buffer, "\E[15~") == 0)
         key = Keys::F5;
-    else if(strcmp(buf, "\E[17~") == 0)
+    else if(strcmp(buffer, "\E[17~") == 0)
         key = Keys::F6;
-    else if(buf[0] == 'l')
+    else if(buffer[0] == 'l')
         key = Keys::Load;
-    else if(buf[0] == 's')
+    else if(buffer[0] == 's')
         key = Keys::Save;
-    else if(buf[0] == 'r')
+    else if(buffer[0] == 'r')
         key = Keys::Run;
-    else if(buf[0] == 't')
+    else if(buffer[0] == 't')
         key = Keys::Step;
-    else if(buf[0] == 'i')
+    else if(buffer[0] == 'i')
         key = Keys::Reset;
     else
         key = Keys::None;
@@ -58,7 +58,10 @@ int mytermrestore()
 {
     termios terminal;
     FILE* term;
-
+	
+	if((term = fopen("term", "wb")) == NULL)
+		return -1;
+	
     if(fread(&terminal, sizeof(terminal), 1, term) > 0)
     {
         if(tcsetattr(0, TCSAFLUSH, &terminal) != 0)
