@@ -11,18 +11,20 @@ enum Keys
 {
     Up = 10,
     Down,
-    Left,
     Right,
+    Left,
+    F5,
+    F6,
     Load,
     Save,
     Run,
     Step,
     Reset,
-    F5,
-    F6,
     Quit,
     None
 };
+
+extern termios options;
 
 int readkey(Keys& key);
 int mytermsave();

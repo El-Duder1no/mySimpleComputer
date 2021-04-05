@@ -30,6 +30,8 @@ int readkey(Keys& key)
         key = Keys::Step;
     else if(buffer[0] == 'i')
         key = Keys::Reset;
+    else if(buffer[0] == 'q')
+        key = Keys::Quit;
     else
         key = Keys::None;
 
@@ -39,68 +41,48 @@ int readkey(Keys& key)
 
 int mytermsave()
 {
-    termios terminal;
-    FILE* term;
-
-    if(tcgetattr(0, &terminal) != 0)
+    if(tcgetattr(STDIN_FILENO, &options) != 0)
         return -1;
-    
-    if((term = fopen("term", "wb")) == NULL)
-        return -1;
-    
-    fwrite(&terminal, sizeof(terminal), 1, term);
-    fclose(term);
 
     return 0;
 }
 
 int mytermrestore()
 {
-    termios terminal;
-    FILE* term;
-	
-	if((term = fopen("term", "wb")) == NULL)
-		return -1;
-	
-    if(fread(&terminal, sizeof(terminal), 1, term) > 0)
-    {
-        if(tcsetattr(0, TCSAFLUSH, &terminal) != 0)
-            return -1;
-        else
-            fclose(term);
-    }
+    if(tcsetattr(STDIN_FILENO, TCSAFLUSH, &options) != 0)
+        return -1;
 
     return 0;
 }
 
 int mytermregime(int regime, int vtime, int vmin, int echo, int sigint)
 {
-    termios options;
+    termios new_options;
 
-    if(tcgetattr(0, &options) != 0)
-        return -1;
-    
-    if(regime == 1)
-        options.c_lflag |= ICANON;
-    else if(regime == 0)
+    mytermsave();
+    new_options = options;
+
+    if(regime == 0)
+        new_options.c_lflag |= ICANON;
+    else if(regime == 1)
     {
-        options.c_lflag &= ~ICANON;
-
-        options.c_cc[VTIME] = vtime;
-        options.c_cc[VMIN] = vmin;
+        new_options.c_lflag &= ~ICANON;
 
         if(echo == 1)
-            options.c_lflag |= ECHO;
+            new_options.c_lflag |= ~ECHO;
         else if(echo == 0)
-            options.c_lflag &= ~ECHO;
-        
+            new_options.c_lflag &= ~ECHO;
+
         if(sigint == 1)
-            options.c_lflag |= ISIG;
+            new_options.c_lflag |= ISIG;
         else if(sigint == 0)
-            options.c_lflag &= ~ISIG;
+            new_options.c_lflag &= ~ISIG;
+
+        new_options.c_cc[VTIME] = vtime;
+        new_options.c_cc[VMIN] = vmin;
     }
 
-    if(tcsetattr(0, TCSANOW, &options) != 0)
+    if(tcsetattr(0, TCSANOW, &new_options) != 0)
         return -1;
     
     return 0;
