@@ -12,13 +12,39 @@
 #include "myBigChars.h"
 #include "readkey.h"
 
-void printBoxes();
-void printKeys();
-void printFlags();
-void printMemory();
-void printBigChars(myBigChar::BigChar sign, std::array<myBigChar::BigChar, 4> chars);
-void printAll(myBigChar::BigChar sign, std::array<myBigChar::BigChar, 4> chars);
+class Terminal
+{
+protected:
+    myComputer PC;
+    Keys key;
+    static int coordinates;
+    static int accumulator;
+    static int instruction_counter;
 
-void runConsole(myBigChar::BigChar sign, std::array<myBigChar::BigChar, 4> chars);
+    void printBoxes();
+    void printKeys();
+    void printFlags();
+    void printMemory();
+    void printAll();
+
+    void resetBG();
+
+    void getCellCoords(int&x, int&y);
+    int setCellBG(int index);
+
+    void moveUp();
+    void moveDown();
+    void moveRight();
+    void moveLeft();
+    void keyF5();
+    void keyF6();
+
+    void reset();
+
+public:
+    Terminal();
+
+    void run();
+};
 
 #endif

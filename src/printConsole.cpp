@@ -1,6 +1,15 @@
 #include "printConsole.h"
 
-void printBoxes()
+int Terminal::coordinates = 0;
+int Terminal::accumulator = 0;
+int Terminal::instruction_counter = 0;
+
+Terminal::Terminal()
+{
+    PC.memoryLoad("./res/RAM.dat");
+}
+
+void Terminal::printBoxes()
 {
     gotoXY(1,1);
     std::cout << "                    ";
@@ -29,8 +38,7 @@ void printBoxes()
 
     printKeys();
 }
-
-void printKeys()
+void Terminal::printKeys()
 {
     gotoXY(15, 51);
     std::cout << "l  - load";
@@ -47,13 +55,10 @@ void printKeys()
     gotoXY(21, 51);
     std::cout << "F6 - instructionCounter";
 }
-
-void printFlags()
+void Terminal::printFlags()
 {
     int flags[5];
     char flagsChar[5] {' '};
-
-    myComputer PC;
 
     PC.regGet(myComputer::OPERATION_OVERFLOW, flags[0]);
     PC.regGet(myComputer::DIVISION_BY_ZERO, flags[1]);
@@ -79,10 +84,8 @@ void printFlags()
               << flagsChar[3] << "  " 
               << flagsChar[4];
 }
-
-void printMemory()
+void Terminal::printMemory()
 {
-    myComputer PC;
     int val;
     
     for(int i = 0; i < 10; i++)
@@ -96,74 +99,205 @@ void printMemory()
             if(val < 0)
                 printf("-%.4X", -val);
             else
-                printf("+%.4X", -val);
+                printf("+%.4X", val);
         }
     }
     std::cout << "\n";
 }
-
-void printBigChars(myBigChar::BigChar sign, std::array<myBigChar::BigChar, 4> chars)
-{
-    myBigChar s(sign);
-    s.print(14, 3, Colors::WHITE, Colors::BLACK);
-
-    myBigChar arr[4] = {chars[0], chars[1], chars[2], chars[3]};
-
-    for(int i = 0, y = 11; i < 4; i++, y += 9)
-    {
-        arr[i].print(14, y, Colors::WHITE, Colors::BLACK);
-    }
-}
-
-void printAll(myBigChar::BigChar sign, std::array<myBigChar::BigChar, 4> chars)
+void Terminal::printAll()
 {
     printBoxes();
     printFlags();
     printMemory();
-    printBigChars(sign, chars);
-    gotoXY(26, 1);
+    
+    gotoXY(3, 73);
+    accumulator < 0 ? printf("-%.4x", -accumulator) : printf("+%.4x", accumulator);
+
+    gotoXY(6, 73);
+    printf("+%.4x", instruction_counter);
+
+    gotoXY(25, 1);
 }
 
-void runConsole(myBigChar::BigChar sign, std::array<myBigChar::BigChar, 4> chars)
+void Terminal::resetBG()
 {
-	Keys key = Keys::None;
-	myComputer PC;
-	
-	printAll(sign, chars);
-	
-	while(key != Keys::Quit)
-	{
-		readkey(key);
-		switch(key)
-		{
-		case Keys::Up:
-			break;
-		case Keys::Down:
-			break;
-		case Keys::Left:
-			break;
-		case Keys::Right:
-			break;
-		case Keys::Load:
-			PC.memoryLoad("../res/RAM.dat");
-			break;
-		case Keys::Save:
-			PC.memorySave("../res/RAM.dat");
-			break;
-		case Keys::F5:
-			break;
-		case Keys::F6:
-			break;
-		case Keys::Run:
-			break;
-		case Keys::Step:
-			break;
-		case Keys::Reset:
-			break;
-		default:
-			break;
-			
-		}
-	}
+    setBGColor(BLACK);
+    setBGColor(RED);
+    fflush(stdout);
 }
 
+void Terminal::getCellCoords(int&x, int&y)
+{
+    x = coordinates % 10;
+    y = coordinates / 10;
+}
+int Terminal::setCellBG(int index)
+{
+    int x, y, val;
+    getCellCoords(x, y);
+
+    switch (index)
+    {
+    case 1:
+        setBGColor(BLUE);
+        gotoXY(y + 2, (6 + 6 * x) - 4);
+
+        PC.memoryGet(coordinates, val) < 0 ? printf("-%.4x", -val) : printf("+%.4x", val);
+        std::cout << "\E[0m";
+        return 0;
+    case 0:
+        setBGColor(LIGHT_BLUE);
+        gotoXY(y + 2, (6 + 6 * x) - 4);
+
+        PC.memoryGet(coordinates, val) < 0 ? printf("-%.4x", -val) : printf("+%.4x", val);
+        std::cout << "\E[0m";
+        return 0;
+    default:
+        return -1;
+    }
+}
+
+void Terminal::moveUp()
+{
+    int x, y;
+    getCellCoords(x, y);
+
+    if(y != 0)
+    {
+        setBGColor(BLACK);
+        y--;
+        setBGColor(RED);
+    }
+
+    coordinates = y * 10 + x;
+    reset();
+}
+void Terminal::moveDown()
+{
+    int x, y;
+    getCellCoords(x, y);
+
+    if(y != 9)
+    {
+        setBGColor(BLACK);
+        y++;
+        setBGColor(RED);
+    }
+
+    coordinates = y * 10 + x;
+    reset();
+}
+void Terminal::moveRight()
+{
+    int x, y;
+    getCellCoords(x, y);
+
+    setBGColor(BLACK);
+    if(x != 9)
+        x++;
+    else if(x == 9 and y != 9)
+    {
+        x = 0;
+        y++;
+    }
+    setBGColor(RED);
+
+    coordinates = y * 10 + x;
+    reset();
+}
+void Terminal::moveLeft()
+{
+    int x, y;
+    getCellCoords(x, y);
+
+    setBGColor(BLACK);
+    if(x != 0)
+        x--;
+    else if(x == 0 and y != 0)
+    {
+        x = 9;
+        y--;
+    }
+    setBGColor(RED);
+
+    coordinates = y * 10 + x;
+    reset();
+}
+void Terminal::keyF5()
+{
+    int val;
+    PC.memoryGet(coordinates, val);
+    accumulator = val;
+    reset();
+    fflush(stdout);
+}
+void Terminal::keyF6()
+{
+    int val;
+    PC.memoryGet(coordinates, val);
+    PC.memorySet(coordinates, val + 1);
+    reset();
+    fflush(stdout);
+}
+
+void Terminal::reset()
+{
+    clrscr();
+    printAll();
+
+    resetBG();
+
+    gotoXY(25, 1);
+    for(int i = 0; i < 8; i++)
+    {
+        for(int j = 0; j < 83; j++)
+            std::cout << " ";
+        std::cout << "\n";
+    }
+
+    gotoXY(33, 1);
+    fflush(stdout);
+}
+
+void Terminal::run()
+{
+    PC.memoryInit();
+    printAll();
+
+    while(key != Keys::Quit)
+    {
+        readkey(key);
+
+        switch (key)
+        {
+        case Keys::Load:
+            reset();
+            PC.memoryLoad("./res/RAM.dat");
+            printAll();
+            break;
+        case Keys::Save:
+            PC.memorySave("./res/RAM.dat");
+            break;
+        case Keys::Up:
+            moveUp();
+            break;
+        case Keys::Down:
+            moveDown();
+            break;
+        case Keys::Right:
+            moveRight();
+            break;
+        case Keys::Left:
+            moveLeft();
+            break;
+        case Keys::F5:
+            keyF5();
+            break;
+        case Keys::F6:
+            keyF5();
+            break;
+        default:
+            break;
+        }
+    }
+}
