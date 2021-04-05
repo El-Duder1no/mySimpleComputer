@@ -2,7 +2,7 @@
 
 int clrscr()
 {
-    std::cout << "\E[H\E[2J";
+    std::cout << "\E[H\E[J";
     return 0;
 }
 
