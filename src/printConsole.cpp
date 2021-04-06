@@ -6,7 +6,9 @@ int Terminal::instruction_counter = 0;
 
 Terminal::Terminal()
 {
-    PC.memoryLoad("./res/RAM.dat");
+    PC.memoryInit();
+    PC.regInit();
+    big_cell.fill(BigChar::Zero);
 }
 
 void Terminal::printBoxes()
@@ -51,8 +53,10 @@ void Terminal::printKeys()
     gotoXY(19, 51);
     std::cout << "i  - reset";
     gotoXY(20, 51);
-    std::cout << "F5 - accumulator";
+    std::cout << "q  - quit";
     gotoXY(21, 51);
+    std::cout << "F5 - accumulator";
+    gotoXY(22, 51);
     std::cout << "F6 - instructionCounter";
 }
 void Terminal::printFlags()
@@ -111,18 +115,18 @@ void Terminal::printAll()
     printMemory();
     
     gotoXY(3, 73);
-    accumulator < 0 ? printf("-%.4x", -accumulator) : printf("+%.4x", accumulator);
+    accumulator < 0 ? printf("-%.4X", -accumulator) : printf("+%.4X", accumulator);
 
     gotoXY(6, 73);
-    printf("+%.4x", instruction_counter);
+    printf("+%.4X", instruction_counter);
 
-    gotoXY(25, 1);
+    gotoXY(24, 14);
 }
 
 void Terminal::resetBG()
 {
-    setBGColor(BLACK);
-    setBGColor(RED);
+    setCellBG(BLACK);
+    setCellBG(RED);
     fflush(stdout);
 }
 
@@ -140,21 +144,36 @@ int Terminal::setCellBG(int index)
     {
     case 1:
         setBGColor(BLUE);
-        gotoXY(y + 2, (6 + 6 * x) - 4);
+        gotoXY(y + 3, (6 + 6 * x) - 3);
 
-        PC.memoryGet(coordinates, val) < 0 ? printf("-%.4x", -val) : printf("+%.4x", val);
+        PC.memoryGet(coordinates, val) < 0 ? printf("-%.4X", -val) : printf("+%.4X", val);
         std::cout << "\E[0m";
         return 0;
     case 0:
         setBGColor(LIGHT_BLUE);
-        gotoXY(y + 2, (6 + 6 * x) - 4);
+        gotoXY(y + 3, (6 + 6 * x) - 3);
 
-        PC.memoryGet(coordinates, val) < 0 ? printf("-%.4x", -val) : printf("+%.4x", val);
+        PC.memoryGet(coordinates, val) < 0 ? printf("-%.4X", -val) : printf("+%.4X", val);
         std::cout << "\E[0m";
         return 0;
     default:
         return -1;
     }
+}
+
+void Terminal::printBigCell()
+{
+	int val;
+	
+	PC.memoryGet(coordinates, val);
+	
+	val < 0 ? big_cell.push_back(BigChar::Minus) : big_cell.push_back(BigChar::Plus);
+	
+	for(int i = 0; i < 4; i++)
+	{
+		big_cell.push_back(val % 16);
+		val /= 16;
+	}
 }
 
 void Terminal::moveUp()
@@ -164,9 +183,9 @@ void Terminal::moveUp()
 
     if(y != 0)
     {
-        setBGColor(BLACK);
+        setCellBG(0);
         y--;
-        setBGColor(RED);
+        setCellBG(1);
     }
 
     coordinates = y * 10 + x;
@@ -179,9 +198,9 @@ void Terminal::moveDown()
 
     if(y != 9)
     {
-        setBGColor(BLACK);
+        setCellBG(0);
         y++;
-        setBGColor(RED);
+        setCellBG(1);
     }
 
     coordinates = y * 10 + x;
@@ -192,7 +211,7 @@ void Terminal::moveRight()
     int x, y;
     getCellCoords(x, y);
 
-    setBGColor(BLACK);
+    setCellBG(0);
     if(x != 9)
         x++;
     else if(x == 9 and y != 9)
@@ -200,7 +219,7 @@ void Terminal::moveRight()
         x = 0;
         y++;
     }
-    setBGColor(RED);
+    setCellBG(1);
 
     coordinates = y * 10 + x;
     reset();
@@ -210,7 +229,7 @@ void Terminal::moveLeft()
     int x, y;
     getCellCoords(x, y);
 
-    setBGColor(BLACK);
+    setCellBG(0);
     if(x != 0)
         x--;
     else if(x == 0 and y != 0)
@@ -218,7 +237,7 @@ void Terminal::moveLeft()
         x = 9;
         y--;
     }
-    setBGColor(RED);
+    setCellBG(1);
 
     coordinates = y * 10 + x;
     reset();
@@ -247,6 +266,9 @@ void Terminal::reset()
 
     resetBG();
 
+    gotoXY(24, 1);
+    std::cout << "Input\\Output: ";
+    
     gotoXY(25, 1);
     for(int i = 0; i < 8; i++)
     {
@@ -255,14 +277,16 @@ void Terminal::reset()
         std::cout << "\n";
     }
 
-    gotoXY(33, 1);
+    gotoXY(24, 14);
     fflush(stdout);
 }
 
 void Terminal::run()
 {
     PC.memoryInit();
+    PC.regInit();
     printAll();
+    reset();
 
     while(key != Keys::Quit)
     {
@@ -271,9 +295,8 @@ void Terminal::run()
         switch (key)
         {
         case Keys::Load:
-            reset();
             PC.memoryLoad("./res/RAM.dat");
-            printAll();
+            reset();
             break;
         case Keys::Save:
             PC.memorySave("./res/RAM.dat");
@@ -294,10 +317,20 @@ void Terminal::run()
             keyF5();
             break;
         case Keys::F6:
-            keyF5();
+            keyF6();
             break;
+        case Keys::Reset:
+			PC.memoryInit();
+			PC.regInit();
+			accumulator = 0;
+			coordinates = 0;
+			instruction_counter = 0;
+			reset();
+        	break;
         default:
             break;
         }
     }
+    fflush(stdout);
+    gotoXY(25, 1);
 }

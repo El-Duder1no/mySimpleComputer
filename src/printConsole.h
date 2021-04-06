@@ -20,6 +20,7 @@ protected:
     static int coordinates;
     static int accumulator;
     static int instruction_counter;
+    static std::array<myBigChar, 5> big_cell;
 
     void printBoxes();
     void printKeys();
@@ -31,6 +32,8 @@ protected:
 
     void getCellCoords(int&x, int&y);
     int setCellBG(int index);
+    
+    void printBigCell();
 
     void moveUp();
     void moveDown();
