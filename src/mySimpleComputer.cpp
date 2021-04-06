@@ -78,6 +78,12 @@ int myComputer::memoryLoad(const char* filename)
     return 0;
 }
 
+
+int myComputer::regInit()
+{
+	regFlags = 0;
+	return 0;
+}
 int myComputer::regSet(int reg, int value)
 {
     if (reg >= 1 and reg <= 5) 

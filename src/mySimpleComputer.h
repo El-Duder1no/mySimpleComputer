@@ -31,6 +31,7 @@ public:
     int memorySave(const char* filename);
     int memoryLoad(const char* filename);
     
+    int regInit();
     int regSet(int reg, int value);
     int regGet(int reg, int &value);
     
