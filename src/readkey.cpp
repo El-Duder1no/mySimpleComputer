@@ -41,6 +41,7 @@ int readkey(Keys& key)
 
 int mytermsave()
 {
+	termios options;
     if(tcgetattr(STDIN_FILENO, &options) != 0)
         return -1;
 
@@ -49,6 +50,7 @@ int mytermsave()
 
 int mytermrestore()
 {
+	termios options;
     if(tcsetattr(STDIN_FILENO, TCSAFLUSH, &options) != 0)
         return -1;
 
@@ -57,6 +59,7 @@ int mytermrestore()
 
 int mytermregime(int regime, int vtime, int vmin, int echo, int sigint)
 {
+	termios options;
     termios new_options;
 
     mytermsave();

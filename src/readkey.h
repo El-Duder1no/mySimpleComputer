@@ -24,8 +24,6 @@ enum Keys
     None
 };
 
-extern termios options;
-
 int readkey(Keys& key);
 int mytermsave();
 int mytermrestore();
