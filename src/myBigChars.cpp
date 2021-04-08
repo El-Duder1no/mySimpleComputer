@@ -1,47 +1,33 @@
 #include "myBigChars.h"
 
-myBigChar::myBigChar() : symbol(char_collection[0]) {}
-myBigChar::myBigChar(myBigChar::BigChar symbol)
+ std::map<int, BC_ARRAY> myBigChar::char_collection =
 {
-    switch(symbol)
-    {
-    case BigChar::Zero:
-        this->symbol = char_collection[0];
-        break;
-    case BigChar::One:
-        this->symbol = char_collection[1];
-        break;
-    case BigChar::Two:
-        this->symbol = char_collection[2];
-        break;
-    case BigChar::Three:
-        this->symbol = char_collection[3];
-        break;
-    case BigChar::Four:
-        this->symbol = char_collection[4];
-        break;
-    case BigChar::Five:
-        this->symbol = char_collection[5];
-        break;
-    case BigChar::Six:
-        this->symbol = char_collection[6];
-        break;
-    case BigChar::Seven:
-        this->symbol = char_collection[7];
-        break;
-    case BigChar::Eight:
-        this->symbol = char_collection[8];
-        break;  
-    case BigChar::Nine:
-        this->symbol = char_collection[9];
-        break;
-    case BigChar::Plus:
-        this->symbol = char_collection[10];
-        break;
-    case BigChar::Minus:
-        this->symbol = char_collection[11];
-        break; 
-    }
+    {0,     BC_ARRAY {3'890'741'118,  2'130'700'263}},  // 0
+    {1,     BC_ARRAY {943'602'744,    943'208'504}},    // 1
+    {2,     BC_ARRAY {1'894'252'414,  4'294'903'580}},  // 2
+    {3,     BC_ARRAY {2'145'451'903,  2'147'475'680}},  // 3
+    {4,     BC_ARRAY {4'286'019'447,  1'886'417'151}},  // 4
+    {5,     BC_ARRAY {2'131'230'719,  2'130'698'495}},  // 5
+    {6,     BC_ARRAY {2'131'230'590,  2'130'700'287}},  // 6
+    {7,     BC_ARRAY {1'893'793'791,  471'604'280}},    // 7
+    {8,     BC_ARRAY {2'129'133'438,  2'129'127'399}},  // 8
+    {9,     BC_ARRAY {4'293'394'302,  2'130'698'494}},  // 9
+    {10,    BC_ARRAY {2'115'508'224,  1'579'134}},      // +
+    {11,    BC_ARRAY {2'113'929'216,  126}},            // -
+};
+
+myBigChar::myBigChar() : symbol(char_collection[Zero]) {}
+myBigChar::myBigChar(int symbol)
+{
+    init(symbol);
+}
+
+void myBigChar::init(int symbol)
+{
+    if(char_collection.count(symbol) == 1)
+        this->symbol = char_collection[symbol];
+    else
+        this->symbol = char_collection[Zero];
 }
 
 int myBigChar::print(int x, int y, Colors fgColor, Colors bgColor)
