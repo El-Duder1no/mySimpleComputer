@@ -8,7 +8,7 @@ Terminal::Terminal()
 {
     PC.memoryInit();
     PC.regInit();
-    big_cell.fill(BigChar::Zero);
+    big_cell.fill(myBigChar(myBigChar::BigChar::Zero));
 }
 
 void Terminal::printBoxes()
@@ -164,16 +164,20 @@ int Terminal::setCellBG(int index)
 void Terminal::printBigCell()
 {
 	int val;
-	
+
 	PC.memoryGet(coordinates, val);
 	
-	val < 0 ? big_cell.push_back(BigChar::Minus) : big_cell.push_back(BigChar::Plus);
+	val < 0 ? big_cell[0] = myBigChar(myBigChar::Minus) 
+            : big_cell[0] = myBigChar(myBigChar::Plus);
 	
-	for(int i = 0; i < 4; i++)
+	for(int i = 4; i > 0; i--)
 	{
-		big_cell.push_back(val % 16);
+		big_cell[i] = myBigChar(val % 16);
 		val /= 16;
 	}
+
+    for(int i = 0, j = 3; i < 5; i++, j += 9)
+        big_cell[i].print(14, j, Colors::WHITE, Colors::BLACK);
 }
 
 void Terminal::moveUp()
@@ -265,9 +269,10 @@ void Terminal::reset()
     printAll();
 
     resetBG();
+    printBigCell();
 
     gotoXY(24, 1);
-    std::cout << "Input\\Output: ";
+    std::cout << " Input\\Output: ";
     
     gotoXY(25, 1);
     for(int i = 0; i < 8; i++)
