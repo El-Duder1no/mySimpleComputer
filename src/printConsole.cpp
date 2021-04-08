@@ -173,7 +173,7 @@ void Terminal::printBigCell()
 	for(int i = 4; i > 0; i--)
 	{
 		big_cell[i] = myBigChar(val % 16);
-		val /= 16;
+		val /= 16; 
 	}
 
     for(int i = 0, j = 3; i < 5; i++, j += 9)
