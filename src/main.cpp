@@ -9,7 +9,7 @@ using namespace std;
 int main()
 {
     srand(time(nullptr));
-        
+
     Terminal term;
     term.run();
 
