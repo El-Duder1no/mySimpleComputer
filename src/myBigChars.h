@@ -18,7 +18,8 @@ public:
     {
         Zero, One,  Two,    Three,  Four,
         Five, Six,  Seven,  Eight,  Nine,
-        Plus, Minus 
+        A,    B,    C,      D,      E, 
+        F,    Plus, Minus
     };
     myBigChar();
     myBigChar(int symbol);
