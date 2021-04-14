@@ -164,20 +164,22 @@ int Terminal::setCellBG(int index)
 void Terminal::printBigCell()
 {
 	int val;
-
 	PC.memoryGet(coordinates, val);
+
+	val >= 0 ? big_cell[4] = myBigChar(myBigChar::Plus)
+             : big_cell[4] = myBigChar(myBigChar::Minus);
 	
-	val < 0 ? big_cell[0] = myBigChar(myBigChar::Minus) 
-            : big_cell[0] = myBigChar(myBigChar::Plus);
-	
-	for(int i = 4; i > 0; i--)
+	for(int i = 0; i < 4; i++)
 	{
 		big_cell[i] = myBigChar(val % 16);
-		val /= 16; 
+		val /= 16;
 	}
 
-    for(int i = 0, j = 3; i < 5; i++, j += 9)
-        big_cell[i].print(14, j, Colors::WHITE, Colors::BLACK);
+    big_cell[4].print(14, 3,  Colors::WHITE, Colors::BLACK);
+    big_cell[3].print(14, 12, Colors::WHITE, Colors::BLACK);
+    big_cell[2].print(14, 21, Colors::WHITE, Colors::BLACK);
+    big_cell[1].print(14, 30, Colors::WHITE, Colors::BLACK);
+    big_cell[0].print(14, 39, Colors::WHITE, Colors::BLACK);
 }
 
 void Terminal::moveUp()
@@ -282,12 +284,13 @@ void Terminal::reset()
         std::cout << "\n";
     }
 
-    gotoXY(24, 14);
+    gotoXY(24, 15);
     fflush(stdout);
 }
 
 void Terminal::run()
 {
+    reset();
     PC.memoryInit();
     PC.regInit();
     printAll();
