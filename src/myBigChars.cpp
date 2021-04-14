@@ -1,6 +1,6 @@
 #include "myBigChars.h"
 
- std::map<int, BC_ARRAY> myBigChar::char_collection =
+std::map<int, BC_ARRAY> myBigChar::char_collection =
 {
     {0,     BC_ARRAY {3'890'741'118,  2'130'700'263}},  // 0
     {1,     BC_ARRAY {943'602'744,    943'208'504}},    // 1
