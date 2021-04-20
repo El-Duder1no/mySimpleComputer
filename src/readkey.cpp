@@ -72,7 +72,7 @@ int mytermregime(int regime, int vtime, int vmin, int echo, int sigint)
         new_options.c_lflag &= ~ICANON;
 
         if(echo == 1)
-            new_options.c_lflag |= ~ECHO;
+            new_options.c_lflag |= ECHO;
         else if(echo == 0)
             new_options.c_lflag &= ~ECHO;
 
