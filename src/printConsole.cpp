@@ -298,6 +298,7 @@ void Terminal::run()
 
     while(key != Keys::Quit)
     {
+	    reset();
         readkey(key);
 
         switch (key)
@@ -339,6 +340,6 @@ void Terminal::run()
             break;
         }
     }
-    fflush(stdout);
     gotoXY(25, 1);
+    mytermrestore();
 }
