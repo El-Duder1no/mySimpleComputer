@@ -1,17 +1,17 @@
-#include "printConsole.h"
+#include "handler.h"
 
-int Terminal::coordinates = 0;
-int Terminal::accumulator = 0;
-int Terminal::instruction_counter = 0;
+int Handler::coordinates = 0;
+int Handler::accumulator = 0;
+int Handler::instruction_counter = 0;
 
-Terminal::Terminal()
+Handler::Handler()
 {
     PC.memoryInit();
     PC.regInit();
-    big_cell.fill(myBigChar(myBigChar::BigChar::Zero));
+    big_cell.fill(myBigChar(0));
 }
 
-void Terminal::printBoxes()
+void Handler::printBoxes()
 {
     gotoXY(1,1);
     std::cout << "                    ";
@@ -40,7 +40,7 @@ void Terminal::printBoxes()
 
     printKeys();
 }
-void Terminal::printKeys()
+void Handler::printKeys()
 {
     gotoXY(15, 51);
     std::cout << "l  - load";
@@ -59,7 +59,7 @@ void Terminal::printKeys()
     gotoXY(22, 51);
     std::cout << "F6 - instructionCounter";
 }
-void Terminal::printFlags()
+void Handler::printFlags()
 {
     int flags[5];
     char flagsChar[5] {' '};
@@ -88,7 +88,7 @@ void Terminal::printFlags()
               << flagsChar[3] << "  " 
               << flagsChar[4];
 }
-void Terminal::printMemory()
+void Handler::printMemory()
 {
     int val;
     
@@ -108,7 +108,7 @@ void Terminal::printMemory()
     }
     std::cout << "\n";
 }
-void Terminal::printAll()
+void Handler::printAll()
 {
     printBoxes();
     printFlags();
@@ -123,45 +123,31 @@ void Terminal::printAll()
     gotoXY(24, 14);
 }
 
-void Terminal::resetBG()
+void Handler::resetBG()
 {
-    setCellBG(BLACK);
-    setCellBG(RED);
+    setCellBG();
     fflush(stdout);
 }
 
-void Terminal::getCellCoords(int&x, int&y)
+void Handler::getCellCoords(int&x, int&y)
 {
     x = coordinates % 10;
     y = coordinates / 10;
 }
-int Terminal::setCellBG(int index)
+int Handler::setCellBG()
 {
     int x, y, val;
     getCellCoords(x, y);
 
-    switch (index)
-    {
-    case 1:
-        setBGColor(BLUE);
-        gotoXY(y + 3, (6 + 6 * x) - 3);
+    setBGColor(LIGHT_BLUE);
+    gotoXY(y + 3, (6 + 6 * x) - 3);
 
-        PC.memoryGet(coordinates, val) < 0 ? printf("-%.4X", -val) : printf("+%.4X", val);
-        std::cout << "\E[0m";
-        return 0;
-    case 0:
-        setBGColor(LIGHT_BLUE);
-        gotoXY(y + 3, (6 + 6 * x) - 3);
-
-        PC.memoryGet(coordinates, val) < 0 ? printf("-%.4X", -val) : printf("+%.4X", val);
-        std::cout << "\E[0m";
-        return 0;
-    default:
-        return -1;
-    }
+    PC.memoryGet(coordinates, val) < 0 ? printf("-%.4X", -val) : printf("+%.4X", val);
+    std::cout << "\E[0m";
+    return 0;
 }
 
-void Terminal::printBigCell()
+void Handler::printBigCell()
 {
 	int val;
 	PC.memoryGet(coordinates, val);
@@ -182,42 +168,40 @@ void Terminal::printBigCell()
     big_cell[0].print(14, 39, Colors::WHITE, Colors::BLACK);
 }
 
-void Terminal::moveUp()
+void Handler::moveUp()
 {
     int x, y;
     getCellCoords(x, y);
 
     if(y != 0)
     {
-        setCellBG(0);
+        setCellBG();
         y--;
-        setCellBG(1);
     }
 
     coordinates = y * 10 + x;
     reset();
 }
-void Terminal::moveDown()
+void Handler::moveDown()
 {
     int x, y;
     getCellCoords(x, y);
 
     if(y != 9)
     {
-        setCellBG(0);
+        setCellBG();
         y++;
-        setCellBG(1);
     }
 
     coordinates = y * 10 + x;
     reset();
 }
-void Terminal::moveRight()
+void Handler::moveRight()
 {
     int x, y;
     getCellCoords(x, y);
 
-    setCellBG(0);
+    setCellBG();
     if(x != 9)
         x++;
     else if(x == 9 and y != 9)
@@ -225,17 +209,16 @@ void Terminal::moveRight()
         x = 0;
         y++;
     }
-    setCellBG(1);
 
     coordinates = y * 10 + x;
     reset();
 }
-void Terminal::moveLeft()
+void Handler::moveLeft()
 {
     int x, y;
     getCellCoords(x, y);
 
-    setCellBG(0);
+    setCellBG();
     if(x != 0)
         x--;
     else if(x == 0 and y != 0)
@@ -243,12 +226,11 @@ void Terminal::moveLeft()
         x = 9;
         y--;
     }
-    setCellBG(1);
 
     coordinates = y * 10 + x;
     reset();
 }
-void Terminal::keyF5()
+void Handler::keyF5()
 {
     int val;
     PC.memoryGet(coordinates, val);
@@ -256,7 +238,7 @@ void Terminal::keyF5()
     reset();
     fflush(stdout);
 }
-void Terminal::keyF6()
+void Handler::keyF6()
 {
     int val;
     PC.memoryGet(coordinates, val);
@@ -265,7 +247,7 @@ void Terminal::keyF6()
     fflush(stdout);
 }
 
-void Terminal::reset()
+void Handler::reset()
 {
     clrscr();
     printAll();
@@ -288,7 +270,7 @@ void Terminal::reset()
     fflush(stdout);
 }
 
-void Terminal::run()
+void Handler::run()
 {
     PC.memoryInit();
     PC.regInit();
@@ -338,6 +320,6 @@ void Terminal::run()
             break;
         }
     }
-    gotoXY(25, 1);
+    gotoXY(33, 1);
     mytermregime(1, 0, 0, 0, 1);
 }

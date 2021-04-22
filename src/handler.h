@@ -12,7 +12,7 @@
 #include "myBigChars.h"
 #include "readkey.h"
 
-class Terminal
+class Handler
 {
 protected:
     myComputer PC;
@@ -31,7 +31,7 @@ protected:
     void resetBG();
 
     void getCellCoords(int&x, int&y);
-    int setCellBG(int index);
+    int setCellBG();
     
     void printBigCell();
 
@@ -45,7 +45,7 @@ protected:
     void reset();
 
 public:
-    Terminal();
+    Handler();
 
     void run();
 };
