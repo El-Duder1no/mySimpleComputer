@@ -290,11 +290,9 @@ void Terminal::reset()
 
 void Terminal::run()
 {
-    reset();
     PC.memoryInit();
     PC.regInit();
     printAll();
-    reset();
 
     while(key != Keys::Quit)
     {
@@ -341,5 +339,5 @@ void Terminal::run()
         }
     }
     gotoXY(25, 1);
-    mytermrestore();
+    mytermregime(1, 0, 0, 0, 1);
 }
