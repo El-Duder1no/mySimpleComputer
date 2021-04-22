@@ -1,4 +1,4 @@
-#include "printConsole.h"
+#include "handler.h"
 
 #include <iostream>
 #include <iomanip>
@@ -10,7 +10,7 @@ int main()
 {
     srand(time(nullptr));
 
-    Terminal term;
+    Handler term;
     term.run();
 
     return 0;
