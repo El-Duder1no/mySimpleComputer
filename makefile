@@ -10,9 +10,9 @@ FLAGS = -Wall -Werror --std=c++17
 all: $(EXE)
 
 $(EXE): $(DIR_SRC)/main.o $(DIR_SRC)/libmySimpleComputer.a $(DIR_SRC)/libmyTerm.a \
-		$(DIR_SRC)/libmyBigChars.a $(DIR_SRC)/libprintConsole.a $(DIR_SRC)/libreadkey.a
+		$(DIR_SRC)/libmyBigChars.a $(DIR_SRC)/libhandler.a $(DIR_SRC)/libreadkey.a
 	$(CC) $(FLAGS) -o $@ $^ -Lbuild -lmySimpleComputer -Lbuild -lmyTerm \
-	-Lbuild -lmyBigChars -Lbuild -lmySimpleComputer -lmyTerm -lprintConsole \
+	-Lbuild -lmyBigChars -Lbuild -lmySimpleComputer -lmyTerm -lhandler \
 	-Lbuild -lreadkey
 	
 $(DIR_SRC)/main.o: src/main.cpp
@@ -33,10 +33,10 @@ $(DIR_SRC)/myBigChars.o: src/myBigChars.cpp
 $(DIR_SRC)/libmyBigChars.a: $(DIR_SRC)/myBigChars.o
 	ar cr $(DIR_SRC)/libmyBigChars.a $(DIR_SRC)/myBigChars.o
 
-$(DIR_SRC)/printConsole.o: src/printConsole.cpp
+$(DIR_SRC)/handler.o: src/handler.cpp
 	$(CC) $(FLAGS) -c $^ -o $@
-$(DIR_SRC)/libprintConsole.a: $(DIR_SRC)/printConsole.o
-	ar cr $(DIR_SRC)/libprintConsole.a $(DIR_SRC)/printConsole.o 
+$(DIR_SRC)/libhandler.a: $(DIR_SRC)/handler.o
+	ar cr $(DIR_SRC)/libhandler.a $(DIR_SRC)/handler.o 
 
 $(DIR_SRC)/readkey.o: src/readkey.cpp
 	$(CC) $(FLAGS) -c $^ -o $@
