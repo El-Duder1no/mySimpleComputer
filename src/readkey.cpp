@@ -1,8 +1,10 @@
 #include "readkey.h"
 
+termios options;
+
 int readkey(Keys& key)
 {
-    mytermregime(1, 0, 1, 1, 1);
+    mytermregime(1, 1, 1, 0, 1);
 
     char buffer[8] {};
 
@@ -41,8 +43,7 @@ int readkey(Keys& key)
 
 int mytermsave()
 {
-	termios options;
-    if(tcgetattr(STDIN_FILENO, &options) != 0)
+    if(tcgetattr(0, &options) != 0)
         return -1;
 
     return 0;
@@ -50,36 +51,26 @@ int mytermsave()
 
 int mytermrestore()
 {
-	termios options;
-    if(tcsetattr(STDIN_FILENO, TCSAFLUSH, &options) != 0)
+    if(tcsetattr(0, TCSANOW, &options) != 0)
         return -1;
 
     return 0;
 }
 
-int mytermregime(int regime, int vtime, int vmin, int echo, int sigint)
+int mytermregime(bool regime, bool echo, bool sigint, int vtime, int vmin)
 {
-	termios options;
     termios new_options;
 
     mytermsave();
     new_options = options;
 
-    if(regime == 0)
+    if(!regime)
         new_options.c_lflag |= ICANON;
-    else if(regime == 1)
+    else
     {
         new_options.c_lflag &= ~ICANON;
-
-        if(echo == 1)
-            new_options.c_lflag |= ECHO;
-        else if(echo == 0)
-            new_options.c_lflag &= ~ECHO;
-
-        if(sigint == 1)
-            new_options.c_lflag |= ISIG;
-        else if(sigint == 0)
-            new_options.c_lflag &= ~ISIG;
+        echo == true ? new_options.c_lflag &= ~ECHO : new_options.c_lflag |= ECHO;
+        sigint == true ? new_options.c_lflag &= ~ISIG : new_options.c_lflag |= ISIG;
 
         new_options.c_cc[VTIME] = vtime;
         new_options.c_cc[VMIN] = vmin;

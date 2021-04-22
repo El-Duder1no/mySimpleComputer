@@ -7,6 +7,8 @@
 #include <sys/types.h>
 #include "myTerm.h"
 
+extern termios options;
+
 enum Keys
 {
     Up = 10,
@@ -27,6 +29,6 @@ enum Keys
 int readkey(Keys& key);
 int mytermsave();
 int mytermrestore();
-int mytermregime(int regime, int vtime, int vmin, int echo, int sigint);
+int mytermregime(bool regime, bool echo, bool sigint, int vtime, int vmin);
 
 #endif
