@@ -276,6 +276,11 @@ void Handler::run()
     PC.regInit();
     printAll();
 
+    PC.regSet(myComputer::CLOCK_PULSE_IGNORE, 0);
+    
+    signal(SIGUSR1, resetSignal);
+    setTimer(1);
+
     while(key != Keys::Quit)
     {
 	    reset();
@@ -314,6 +319,7 @@ void Handler::run()
 			accumulator = 0;
 			coordinates = 0;
 			instruction_counter = 0;
+            raise(SIGUSR1);
 			reset();
         	break;
         default:
@@ -322,4 +328,34 @@ void Handler::run()
     }
     gotoXY(33, 1);
     mytermregime(1, 0, 0, 0, 1);
+}
+
+void Handler::setTimer(long interval)
+{
+    signal(SIGALRM, signalHandler);
+    nval.it_interval.tv_sec = interval;
+    nval.it_interval.tv_usec = 0;
+    nval.it_value.tv_sec = 1;
+    nval.it_value.tv_usec = 0;
+    setitimer(ITIMER_REAL, &nval, nullptr);    
+}
+
+void Handler::resetSignal(int signal)
+{
+    accumulator = 0;
+    instruction_counter = 0;
+    PC.regInit();
+    PC.memoryInit();
+    reset();
+}
+
+void Handler::signalHandler(int signal)
+{
+    int value;
+    PC.regGet(myComputer::CLOCK_PULSE_IGNORE, value);
+    if(value == 0)
+    {
+        instruction_counter++;
+        reset();
+    }
 }

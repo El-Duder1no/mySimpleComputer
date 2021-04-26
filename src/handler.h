@@ -6,6 +6,8 @@
 #include <array>
 #include <sys/ioctl.h>
 #include <unistd.h>
+#include <signal.h>
+#include <sys/time.h>
 
 #include "mySimpleComputer.h"
 #include "myTerm.h"
@@ -21,6 +23,7 @@ protected:
     static int accumulator;
     static int instruction_counter;
     std::array<myBigChar, 5> big_cell;
+    itimerval nval;
 
     void printBoxes();
     void printKeys();
@@ -43,6 +46,10 @@ protected:
     void keyF6();
 
     void reset();
+
+    void setTimer(long interval);
+    void resetSignal(int signal);
+    void signalHandler(int signal);
 
 public:
     Handler();
