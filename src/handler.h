@@ -23,7 +23,6 @@ protected:
     static int accumulator;
     static int instruction_counter;
     std::array<myBigChar, 5> big_cell;
-    itimerval nval;
 
     void printBoxes();
     void printKeys();
