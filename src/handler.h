@@ -23,6 +23,7 @@ protected:
     static int accumulator;
     static int instruction_counter;
     std::array<myBigChar, 5> big_cell;
+    
 
     void printBoxes();
     void printKeys();
@@ -46,14 +47,19 @@ protected:
 
     void reset();
 
-    void setTimer(long interval);
-    void resetSignal(int signal);
-    void signalHandler(int signal);
+
 
 public:
     Handler();
 
     void run();
+    
+    void setTimer(long interval);
+    void resetSignal(int signal);
+    void signalHandler(int signal);
 };
+
+static Handler* obj;
+void signal_handler (int signum) {obj->signalHandler(signum);}
 
 #endif

@@ -309,11 +309,11 @@ void Handler::run()
 
     PC.regSet(myComputer::CLOCK_PULSE_IGNORE, 0);
     
-    void(*pFunc)(int) = &Handler::resetSignal;
+    //void(*pFunc)(int) = &Handler::resetSignal;
     
-    
-    signal(SIGUSR1, pFunc);
-    setTimer(1);
+    obj = this;
+    signal(SIGUSR1, signal_handler);
+    signal(SIGALRM, signal_handler);
 
     while(key != Keys::Quit)
     {
