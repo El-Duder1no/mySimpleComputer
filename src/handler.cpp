@@ -308,9 +308,7 @@ void Handler::run()
     printAll();
 
     PC.regSet(myComputer::CLOCK_PULSE_IGNORE, 0);
-    
-    //void(*pFunc)(int) = &Handler::resetSignal;
-    
+        
     obj = this;
     signal(SIGUSR1, signal_handler);
     signal(SIGALRM, signal_handler);
